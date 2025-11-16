@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      background-color: #fdfdfd;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 60px;
+      background-color: #0b1d3a;
+      border-right: 1px solid #0b1d3a;
+      transition: width .3s;
+      overflow: hidden;
+      z-index: 100;
+    }
+
+    .sidebar:hover { width: 240px; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 35px;
+      height: 35px;
+    }
+
+    .logo h2 {
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      margin-top: 20px;
+      list-style: none;
+    }
+
+    .nav-links li {
+      padding: 15px;
+      display: flex;
+      gap: 15px;
+      color: #cfd8e3;
+      cursor: pointer;
+      transition: .3s;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .nav-links li i {
+      width: 30px;
+      color: white;
+      text-align: center;
+    }
+
+    .sidebar:hover .nav-links li span { opacity: 1; }
+    .nav-links li span { opacity: 0; transition: .3s; }
+
+    .nav-links li:hover,
+    .nav-links li.active {
+      background-color: #1b3a6f;
+      color: white;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      margin-left: 60px;
+      padding: 40px;
+      transition: .3s;
+      min-height: 100vh;
+      width: calc(100% - 60px);
+    }
+
+    .sidebar:hover ~ .main-content {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+    }
+
+    header h1 {
+      color: #0b1d3a;
+      margin-bottom: 20px;
+    }
+
+    /* TYPING TEST CARD */
+    .typing-app {
+      width: 100%;
+      max-width: 750px;
+      margin: auto;
+      background: #0b1d3a;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      color: white;
+    }
+
+    .typing-app h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: #1b3a6f;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 15px;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: #10b981;
+      border: none;
+      color: #002;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #words {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 120px;
+      line-height: 1.9;
+      font-size: 20px;
+    }
+
+    .word { padding-right: 8px; }
+    .word.current { background: rgba(255,255,255,0.2); border-radius: 5px; }
+
+    .char.correct { color: #10b981; }
+    .char.incorrect { color: #ff6b6b; text-decoration: line-through; }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: none;
+      font-size: 18px;
+    }
+
+    .stats {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* CERTIFICATE AREA */
+    #certificateArea {
+      display: none;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #userName {
+      padding: 10px;
+      width: 60%;
+      border-radius: 10px;
+      border: 1px solid #999;
+      margin-top: 10px;
+    }
+
+    .btn-cert {
+      background: #10b981;
+      color: #002;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a href="index.html" class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png">
+      <h2>BSOA LEARNING</h2>
+    </a>
+
+    <ul class="nav-links">
+      <li onclick="location.href='learn.html'"><i class="fas fa-book-open"></i><span>SUBJECTS</span></li>
+      <li onclick="location.href='quiz.html'"><i class="fas fa-question-circle"></i><span>QUIZZES</span></li>
+      <li class="active" onclick="location.href='practice.html'"><i class="fas fa-laptop-code"></i><span>PRACTICE</span></li>
+      <li onclick="location.href='about.html'"><i class="fas fa-info-circle"></i><span>ABOUT</span></li>
+    </ul>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <header>
+      <h1>Keyboarding  Typing Accuracy Challenge</h1>
+    </header>
+
+    <div class="typing-app" id="testArea">
+      <h2>Typing Test</h2>
+      <p style="text-align:center; opacity:.9;">Type the 30-word paragraph with spaces.</p>
+
+      <div class="card">
+        <div class="controls">
+          <button class="btn" id="btn-new">New</button>
+          <button class="btn" id="btn-start">Start</button>
+          <button class="btn primary" id="btn-reset">Reset</button>
+
+          <select id="timeLimit">
+            <option value="60">1 minute</option>
+            <option value="120" selected>2 minutes</option>
+            <option value="180">3 minutes</option>
+            <option value="300">5 minutes</option>
+          </select>
+        </div>
+
+        <div id="words"></div>
+        <input id="input" placeholder="Start typing here..." autocomplete="off" />
+
+        <div class="stats">
+          <div><small>Time</small><br><strong id="time">120</strong>s</div>
+          <div><small>WPM</small><br><strong id="wpm">0</strong></div>
+          <div><small>Accuracy</small><br><strong id="acc">100%</strong></div>
+          <div><small>Typed</small><br><strong id="typed">0</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATE AREA -->
+    <div id="certificateArea">
+      <h2>🎉 Congratulations! 🎉</h2>
+      <p>Enter your name to generate your certificate:</p>
+
+      <input type="text" id="userName" placeholder="Your Name">
+
+      <br><br>
+      <button class="btn-cert" onclick="generateCertificate()">Generate Certificate</button>
+
+      <br><br>
+      <canvas id="certificateCanvas" width="900" height="650" style="background:white;border:1px solid #777;"></canvas>
+
+      <a id="downloadLink" class="btn-cert" style="display:none;" download="certificate.pdf">Download Certificate</a>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+/* Paragraph */
+const PARAGRAPH_30 = `
+Typing practice improves focus, accuracy, and speed when using the keyboard for daily tasks. Consistent drills with random words and simple sentences help strengthen muscle memory and enhance overall performance.
+`.trim().split(" ");
+
+const wordsEl = document.getElementById("words");
+const inputEl = document.getElementById("input");
+const timeEl = document.getElementById("time");
+const testArea = document.getElementById("testArea");
+const certificateArea = document.getElementById("certificateArea");
+
+let wordsList = [];
+let currentIndex = 0;
+let timer = null;
+let timeLeft = 120;
+let started = false;
+let correctChars = 0;
+let totalTyped = 0;
+let timeUsed = 0;
+
+/* Render Words */
+function renderWords() {
+  wordsEl.innerHTML = "";
+  wordsList.forEach((w, i) => {
+    const span = document.createElement("span");
+    span.className = "word" + (i === currentIndex ? " current" : "");
+    [...w].forEach(ch => {
+      const c = document.createElement("span");
+      c.className = "char";
+      c.textContent = ch;
+      span.appendChild(c);
+    });
+    wordsEl.appendChild(span);
+    wordsEl.append(" ");
+  });
+}
+
+/* New Test */
+function newTest() {
+  timeLeft = Number(document.getElementById("timeLimit").value);
+  wordsList = PARAGRAPH_30;
+  currentIndex = 0;
+  correctChars = 0;
+  totalTyped = 0;
+  started = false;
+
+  inputEl.disabled = false;
+  inputEl.value = "";
+  timeEl.textContent = timeLeft;
+
+  renderWords();
+}
+
+function startTimer() {
+  if (started) return;
+  started = true;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    timeEl.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      inputEl.disabled = true;
+    }
+  }, 1000);
+}
+
+/* Typing Logic */
+inputEl.addEventListener("input", e => {
+  if (!started) startTimer();
+
+  const value = e.target.value;
+  const currentWord = wordsList[currentIndex];
+  const wordSpan = document.querySelector(".word.current");
+  const chars = wordSpan.querySelectorAll(".char");
+
+  chars.forEach((c, i) => {
+    const typed = value[i];
+    c.classList.remove("correct","incorrect");
+    if (typed){
+      c.classList.add( typed === c.textContent ? "correct" : "incorrect" );
+    }
+  });
+
+  if (value === currentWord + " "){
+    for (let i=0; i<value.length; i++){
+      totalTyped++;
+      if (value[i] === (currentWord+" ")[i]) correctChars++;
+    }
+
+    inputEl.value = "";
+    wordSpan.classList.remove("current");
+    currentIndex++;
+
+    if (currentIndex >= wordsList.length){
+      clearInterval(timer);
+      inputEl.disabled = true;
+
+      timeUsed = Number(document.getElementById("timeLimit").value) - timeLeft;
+      showCertificate();
+      return;
+    }
+
+    document.querySelectorAll(".word")[currentIndex].classList.add("current");
+  }
+});
+
+/* Show Certificate */
+function showCertificate(){
+  testArea.style.display = "none";
+  certificateArea.style.display = "block";
+}
+
+/* Generate Certificate */
+function generateCertificate(){
+  const canvas = document.getElementById("certificateCanvas");
+  const ctx = canvas.getContext("2d");
+  const name = document.getElementById("userName").value || "Student";
+
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0,0,900,650);
+
+  ctx.strokeStyle = "#0b1d3a";
+  ctx.lineWidth = 8;
+  ctx.strokeRect(25,25,850,600);
+
+  ctx.fillStyle = "#1b3a6f";
+  ctx.font = "40px Poppins";
+  ctx.textAlign = "center";
+  ctx.fillText("CERTIFICATE OF COMPLETION", 450, 140);
+
+  ctx.font = "24px Poppins";
+  ctx.fillStyle = "#555";
+  ctx.fillText("Awarded to", 450, 200);
+
+  ctx.font = "48px Poppins";
+  ctx.fillStyle = "#0b1d3a";
+  ctx.fillText(name, 450, 260);
+
+  ctx.font = "22px Poppins";
+  ctx.fillStyle = "#444";
+  ctx.fillText("For successfully completing the 30-word typing challenge.", 450, 320);
+  ctx.fillText(`Finished in ${timeUsed} seconds`, 450, 360);
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("landscape","px",[900,650]);
+
+  const img = canvas.toDataURL("image/png");
+  pdf.addImage(img,"PNG",0,0,900,650);
+
+  const link = document.getElementById("downloadLink");
+  link.href = pdf.output("bloburl");
+  link.style.display = "inline-block";
+}
+
+/* Buttons */
+document.getElementById("btn-new").onclick = newTest;
+document.getElementById("btn-start").onclick = ()=> inputEl.focus();
+document.getElementById("btn-reset").onclick = newTest;
+
+/* Init */
+newTest();
+</script>
+<script>
+/* BLOCK RIGHT-CLICK */
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+/* BLOCK COPY, CUT, PASTE, SELECT ALL */
+document.addEventListener("keydown", function (e) {
+  if (
+    (e.ctrlKey || e.metaKey) &&
+    ["c", "v", "x", "a"].includes(e.key.toLowerCase())
+  ) {
+    e.preventDefault();
+  }
+});
+
+/* BLOCK COPY FROM MOUSE */
+document.addEventListener("copy", e => e.preventDefault());
+document.addEventListener("cut", e => e.preventDefault());
+document.addEventListener("paste", e => e.preventDefault());
+
+/* BLOCK TEXT SELECTION */
+document.addEventListener("selectstart", e => {
+  if (e.target.id !== "input") e.preventDefault(); 
+});
+
+/* BLOCK DRAGGING TEXT */
+document.addEventListener("dragstart", e => e.preventDefault());
+</script>
+
+
+</body>
+</html>

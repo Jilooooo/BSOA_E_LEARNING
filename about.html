@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+    body{display:flex;background-color:#f9fbff;min-height:100vh;overflow-x:hidden}
+
+    /* SIDEBAR */
+    .sidebar{
+      position:fixed;
+      top:0;
+      left:0;
+      height:100%;
+      width:75px;
+      background:#0b1e3f;
+      border-right:1px solid #162b57;
+      transition:all .3s ease;
+      overflow:hidden;
+      z-index:1000;
+    }
+    .sidebar:hover{width:240px}
+    .sidebar.active{left:0;width:240px}
+    .logo{display:flex;align-items:center;gap:10px;padding:15px;text-decoration:none}
+    .logo img{width:35px;height:35px;filter:brightness(1.2);transition:transform .3s}
+    .logo:hover img{transform:scale(1.1)}
+    .logo h2{color:#fff;font-size:1.2rem;font-weight:600;opacity:0;transition:opacity .3s}
+    .sidebar:hover .logo h2,.sidebar.active .logo h2{opacity:1}
+    .nav-links{list-style:none;margin-top:20px}
+    .nav-links li{display:flex;align-items:center;gap:15px;padding:15px;cursor:pointer;color:#cfd8ff;transition:.3s ease;white-space:nowrap}
+    .nav-links li i{font-size:18px;color:#93b4ff;width:30px;text-align:center;margin-left:5px}
+    .nav-links li span{opacity:0;transition:opacity .3s}
+    .sidebar:hover .nav-links li span,.sidebar.active .nav-links li span{opacity:1}
+    .nav-links li:hover,.nav-links li.active{background:#1e3d7c;color:#fff;border-radius:10px}
+    .nav-links li:hover i,.nav-links li.active i{color:#fff}
+
+    /* TOGGLE BUTTON */
+    .menu-btn{
+      display:none;
+      position:fixed;
+      top:15px;
+      left:15px;
+      background-color:#0b1e3f;
+      color:#fff;
+      border:none;
+      padding:10px 12px;
+      border-radius:6px;
+      cursor:pointer;
+      z-index:1500;
+      font-size:18px;
+      transition:.3s ease;
+    }
+    .menu-btn:hover{background:#1e3d7c}
+
+    /* MAIN CONTENT */
+    .main-content{flex:1;margin-left:95px;padding:40px;transition:margin-left .3s}
+    .sidebar:hover~.main-content,.sidebar.active~.main-content{margin-left:240px}
+    header h1{color:#0b1e3f;margin-bottom:25px;font-size:2rem}
+
+    /* LESSONS */
+    .lessons{display:flex;flex-direction:column;gap:20px}
+    .lesson{background:#fff;border-radius:12px;padding:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 8px rgba(0,0,0,0.05);transition:.3s}
+    .lesson:hover{transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+    .icon{width:50px;height:50px;border-radius:12px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:22px;margin-right:20px}
+
+    /* COLORS */
+    .navy{background:#1e3d7c}
+    .blue-light{background:#4a74d3}
+    .sky{background:#67a8ff}
+    .teal{background:#4ac4c4}
+    .blue{background:#4c78ff}
+    .aqua{background:#66b2ff}
+    .blue-dark{background:#1b4b91}
+    .navy-deep{background:#162447}
+    .royal{background:#2a3fa3}
+    .indigo{background:#3c53a4}
+    .midnight{background:#0b2245}
+    .cyan{background:#22a6b3}
+
+    .details{flex:1}
+    .details h3{font-size:1rem;color:#333;margin-bottom:5px}
+    .details p{color:#777;font-size:0.9rem}
+    .start-btn{background:#fff;border:2px solid #1e3d7c;color:#1e3d7c;font-weight:600;border-radius:25px;padding:8px 18px;transition:.3s;cursor:pointer}
+    .start-btn:hover{background:#1e3d7c;color:#fff}
+
+    @media(max-width:768px){
+      .menu-btn{display:block}
+      .sidebar{left:-240px;width:240px}
+      .sidebar.active{left:0}
+      .main-content{margin-left:0;padding:25px}
+      .sidebar.active~.main-content{margin-left:0}
+      header h1{text-align:center;font-size:1.4rem;margin-top:50px}
+      .lesson{flex-direction:column;align-items:flex-start}
+      .start-btn{margin-top:10px;align-self:flex-end}
+    }
+
+    @media(max-width:480px){
+      .details h3{font-size:0.9rem}
+      .details p{font-size:0.8rem}
+      .start-btn{padding:6px 14px;font-size:0.85rem}
+    }
+  </style>
+</head>
+<body>
+  <!-- TOGGLE BUTTON -->
+  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <a href="index.html" class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" alt="logo">
+      <h2>BSOA LEARNING</h2>
+    </a>    <ul class="nav-links">
+      <li onclick="window.location.href='learn.html'"><i class="fas fa-book-open"></i> <span>SUBJECTS</span></li>
+      <li onclick="window.location.href='quiz.html'"><i class="fas fa-question-circle"></i> <span>QUIZZES</span></li>
+       <li onclick="window.location.href='practice.html'"><i class="fas fa-laptop-code"></i> <span>PRACTICE</span></li>
+      <li class="active" onclick="window.location.href='about.html'"><i class="fas fa-info-circle"></i> <span>ABOUT</span></li>
+    </ul>
+  </div>
+  <!-- Main Content -->
+  <div class="main-content" id="main">
+    <header>
+      <h1>Learn More About This Website and Its Creators</h1>
+    </header>
+<div class="about-container" style="max-width:900px;margin:auto;">
+
+
+  <!-- MAIN BIG CARD -->
+  <div style="
+    background:#fff;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+    text-align:center;
+  ">
+      
+    <h3 style="font-size:1.5rem;color:#0b1e3f;margin-bottom:10px;">
+      Meet the BSOA Learning Team
+    </h3>
+
+    <p style="color:#666;margin-bottom:20px;">
+      The dedicated creators behind BSOA Learning — committed to helping students learn easily and interactively.
+    </p>
+
+    <!-- GROUP PHOTO -->
+    <img src="your-photo-here.jpg" 
+      alt="BSOA Learning Team Photo"
+      style="width:100%;border-radius:15px;margin-bottom:10px;">
+
+    <p style="color:#777;font-size:0.9rem;margin-bottom:10px;">
+      Our passionate team working together to bring accessible and user-friendly learning for everyone.
+    </p>
+  </div>
+
+  <!-- SECTION CARDS -->
+  <div style="margin-top:25px;display:flex;flex-direction:column;gap:15px;">
+
+    <!-- Mission -->
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      display:flex;
+      gap:15px;
+      align-items:flex-start;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <div style="
+        width:50px;height:50px;background:#ffe4e8;
+        border-radius:12px;display:flex;justify-content:center;
+        align-items:center;font-size:22px;color:#ff4978;
+      ">
+        <i class="fas fa-bullseye"></i>
+      </div>
+      <div>
+        <h3 style="color:#0b1e3f;font-size:1.1rem;">Our Mission</h3>
+        <p style="color:#555;font-size:0.9rem;">
+          BSOA Learning aims to help students learn Office Administration concepts easily through lessons, quizzes, and practice tools.
+        </p>
+      </div>
+    </div>
+
+    <!-- Story -->
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      display:flex;
+      gap:15px;
+      align-items:flex-start;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <div style="
+        width:50px;height:50px;background:#e5e8ff;
+        border-radius:12px;display:flex;justify-content:center;
+        align-items:center;font-size:22px;color:#4a60ff;
+      ">
+        <i class="fas fa-book"></i>
+      </div>
+      <div>
+        <h3 style="color:#0b1e3f;font-size:1.1rem;">Our Story</h3>
+        <p style="color:#555;font-size:0.9rem;">
+          BSOA Learning was built to support Office Administration students with accessible learning tools, interactive activities,
+          and a user-friendly study guide.
+        </p>
+      </div>
+    </div>
+
+    <!-- Special Thanks -->
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      display:flex;
+      gap:15px;
+      align-items:flex-start;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <div style="
+        width:50px;height:50px;background:#ffe8d2;
+        border-radius:12px;display:flex;justify-content:center;
+        align-items:center;font-size:22px;color:#ff914d;
+      ">
+        <i class="fas fa-heart"></i>
+      </div>
+      <div>
+        <h3 style="color:#0b1e3f;font-size:1.1rem;">Special Thanks</h3>
+        <p style="color:#555;font-size:0.9rem;">
+          Special thanks to our instructors and supporters whose guidance inspired us to build this learning platform.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FEATURES SECTION -->
+  <div style="
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
+  ">
+
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <i class="fas fa-lightbulb" style="font-size:28px;color:#ffba3b;"></i>
+      <h3 style="margin-top:10px;color:#0b1e3f;font-size:1.1rem;">Easy to Learn</h3>
+      <p style="color:#777;font-size:0.9rem;">Clear and simple lessons designed for fast understanding.</p>
+    </div>
+
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <i class="fas fa-gamepad" style="font-size:28px;color:#4a90e2;"></i>
+      <h3 style="margin-top:10px;color:#0b1e3f;font-size:1.1rem;">Interactive</h3>
+      <p style="color:#777;font-size:0.9rem;">Fun quizzes and practice activities to test your skills.</p>
+    </div>
+
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    ">
+      <i class="fas fa-user-check" style="font-size:28px;color:#10b981;"></i>
+      <h3 style="margin-top:10px;color:#0b1e3f;font-size:1.1rem;">No Sign-Up</h3>
+      <p style="color:#777;font-size:0.9rem;">Start learning instantly. No accounts needed.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<br><br>
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("active");
+    }
+  </script>
