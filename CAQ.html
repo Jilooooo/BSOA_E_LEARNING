@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Customer Analytics Practice Quiz</title>
+  <title>Customer Analytics Quiz</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
     *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
-
     body{display:flex;background:#f9fbff;min-height:100vh;overflow-x:hidden}
 
     /* SIDEBAR */
@@ -27,68 +25,107 @@
     .sidebar:hover .logo h2,.sidebar.active .logo h2{opacity:1}
 
     .nav-links{list-style:none;margin-top:20px}
-    .nav-links li{display:flex;align-items:center;gap:15px;padding:15px;cursor:pointer;color:#cfd8ff;transition:.3s}
+    .nav-links li{display:flex;align-items:center;gap:15px;padding:15px;cursor:pointer;color:#cfd8ff;transition:.3s;white-space:nowrap}
     .nav-links li i{font-size:18px;color:#93b4ff;width:30px;text-align:center}
     .nav-links li span{opacity:0;transition:opacity .3s}
     .sidebar:hover .nav-links li span,.sidebar.active .nav-links li span{opacity:1}
     .nav-links li:hover,.nav-links li.active{background:#1e3d7c;color:#fff;border-radius:10px}
+    .nav-links li:hover i,.nav-links li.active i{color:#fff}
 
     /* MAIN */
-    .main{flex:1;margin-left:80px;padding:40px;transition:.3s}
+    .main{flex:1;margin-left:80px;padding:40px;transition:margin-left .3s}
     .sidebar:hover~.main{margin-left:240px}
     header h1{color:#0b1e3f;margin-bottom:25px;font-size:2rem}
 
-    /* QUIZ */
     .quiz-container{background:#fff;padding:30px;border-radius:12px;box-shadow:0 3px 8px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:25px}
-    .quiz-block{background:#eef4ff;padding:20px;border-radius:12px;border-left:6px solid #0b1e3f}
+    .quiz-block{background:#eef4ff;padding:20px;border-radius:12px;border-left:6px solid #0b1e3f;transition:.3s}
+    .quiz-block:hover{transform:scale(1.02)}
     .quiz-block h2{color:#0b1e3f;font-size:1.1rem;margin-bottom:12px}
 
-    .options label{display:block;background:#fff;border:1px solid #ddd;padding:10px 15px;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:.3s}
+    .options label{display:block;background:#fff;border:1px solid #ddd;padding:10px 15px;
+      border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all .3s ease;user-select:none}
     .options label:hover{background:#dbe6ff}
 
-    .controls{display:flex;justify-content:center;gap:12px;margin-top:25px}
+    .controls{display:flex;justify-content:center;gap:12px;margin-top:25px;flex-wrap:wrap}
     button{background:#0b1e3f;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-weight:600;cursor:pointer}
     button:hover{background:#1e3d7c}
 
-    /* NORMAL MODAL */
-    .modal{
-      display:none;position:fixed;left:0;top:0;width:100%;height:100%;
-      background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center;
-    }
-    .modal-content{
-      background:#fff;padding:25px;border-radius:12px;text-align:center;width:92%;max-width:420px;
+    /* MODALS (same improved style) */
+    .modal{display:none;position:fixed;z-index:200;left:0;top:0;width:100%;height:100%;
+      background:rgba(0,0,0,.5);justify-content:center;align-items:center}
+    .modal-content{background:#fff;padding:28px;border-radius:12px;text-align:center;width:92%;max-width:420px}
+    .modal-content h2{color:#0b1e3f;margin-bottom:8px}
+
+    /* CERTIFICATE MODAL FIX (improved) */
+    #certificateModal {
+      display: none;
+      position: fixed;
+      z-index: 3000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,.6);
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
     }
 
-    /* CERTIFICATE MODAL */
-    #certificateModal{
-      display:none;position:fixed;left:0;top:0;width:100%;height:100%;
-      background:rgba(0,0,0,.7);z-index:5000;padding:20px;
-      justify-content:center;align-items:center;overflow:auto;
-    }
-    #certificateModal .modal-content{
-      background:#fff;padding:25px;border-radius:12px;text-align:center;
-      width:100%;max-width:980px;box-shadow:0 5px 20px rgba(0,0,0,.2);
-    }
-    #certCanvas{
-      display:block;margin:20px auto;max-width:100%;height:auto;
+    #certificateModal .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 1200px;
+      width: 100%;
+      box-shadow: 0 5px 20px rgba(0,0,0,.2);
     }
 
-    #downloadBtn{
-      display:none;background:#10b981;color:#fff;padding:10px 18px;
-      margin-top:15px;border-radius:8px;font-weight:600;cursor:pointer;
+    /* Center the certificate canvas */
+    #certCanvas {
+      margin: 20px auto;
+      display: block;        /* forces center alignment */
+      max-width: 100%;       /* prevents overflow on small screens */
+      height: auto;
+      background: white;
+      border-radius:6px;
     }
 
+    /* visible button style for download */
+    #downloadBtn {
+      display: none;
+      margin-left: 12px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      background: #10b981;
+      color: #002;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-btn{display:none;position:fixed;top:15px;left:15px;background:#0b1e3f;color:#fff;
+      border:none;padding:10px 12px;border-radius:6px;cursor:pointer;z-index:1500;font-size:18px}
+    .menu-btn:hover{background:#1e3d7c}
+
+    @media(max-width:768px){
+      .menu-btn{display:block}
+      .sidebar{left:-240px;width:240px}
+      .sidebar.active{left:0}
+      .main{margin-left:0!important;padding:20px}
+      .sidebar.active~.main{margin-left:0!important}
+    }
   </style>
 </head>
+
 <body>
 
-<!-- MENU BUTTON -->
-<button class="menu-btn" onclick="toggleMenu()" style="display:none"><i class="fas fa-bars"></i></button>
+<button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <a href="index.html" class="logo">
-    <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png">
+    <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" alt="logo">
     <h2>BSOA LEARNING</h2>
   </a>
 
@@ -100,8 +137,7 @@
   </ul>
 </div>
 
-
-  <!-- MAIN CONTENT -->
+ <!-- MAIN CONTENT -->
   <main class="main">
     <header><h1>Customer Analytics Quiz</h1></header>
     <form id="quizForm" class="quiz-container">
@@ -147,61 +183,62 @@
       <div class="quiz-block"><h2>30. An online shop has many complaints about late deliveries. To improve satisfaction they should focus on:</h2><div class="options"><label><input type="radio" name="q30" value="a">Convenience (faster delivery)</label><label><input type="radio" name="q30" value="b">More advertising</label><label><input type="radio" name="q30" value="c">Higher prices</label><label><input type="radio" name="q30" value="d">None of the above</label></div></div>
 
 
-<!-- SUBMIT BUTTON -->
 <div class="controls">
   <button type="button" onclick="checkAnswers()">Submit Quiz</button>
-  <button type="button" onclick="document.getElementById('quizForm').reset()" style="background:#6c757d">Reset</button>
 </div>
 
 </form>
 </main>
 
-<!-- SCORE MODAL -->
+<!-- RESULT MODAL -->
 <div class="modal" id="scoreModal">
   <div class="modal-content">
     <h2>Quiz Result</h2>
     <p id="scoreText"></p>
     <p id="percentText" style="color:#555"></p>
 
-    <div id="certArea" style="display:none; margin-top:15px;">
-      <input id="studentName" type="text" placeholder="Enter your name"
-        style="padding:8px;width:80%;border-radius:6px;border:1px solid #ccc;margin-bottom:10px;">
+    <!-- SHOW ONLY IF PASS -->
+    <button id="certBtn" style="display:none;background:#10b981;color:#002"
+            onclick="openCertificate()">Generate Certificate</button>
 
-      <button onclick="openCertificate()" style="background:#10b981">Generate Certificate</button>
-    </div>
-
-    <button onclick="closeModal()" style="margin-top:15px;">OK — Reset Quiz</button>
+    <br><br>
+    <button onclick="closeModal()">OK — Reset Quiz</button>
   </div>
 </div>
 
-<!-- WARNING -->
+<!-- INCOMPLETE WARNING -->
 <div class="modal" id="warningModal">
   <div class="modal-content">
     <h2>⚠️ Incomplete Quiz</h2>
-    <p>Please answer <b>all 30 questions</b> before submitting.</p>
+    <p>You must answer <b>all 30 questions</b>.</p>
     <button onclick="closeWarning()">OK</button>
   </div>
 </div>
 
-<!-- CERTIFICATE MODAL -->
+<!-- CERTIFICATE MODAL (same improved modal & design) -->
 <div class="modal" id="certificateModal">
   <div class="modal-content">
-    <h2 style="margin-bottom:10px;color:#0b1e3f">Your Certificate</h2>
-    <canvas id="certCanvas" width="900" height="650"></canvas>
+    <h2>Enter Your Name</h2>
+    <input type="text" id="studentName" placeholder="Your Name" style="padding:10px;border-radius:8px;border:1px solid #ccc;width:80%">
 
-    <button id="downloadBtn" onclick="downloadCertificate()">Download Certificate</button>
-    <button onclick="closeCert()" style="margin-top:10px;background:#6c757d">Close</button>
+    <div style="margin-top:12px; display:flex; justify-content:center; align-items:center; gap:10px;">
+      <button id="btnCreateCert" style="background:#0b1e3f;color:#fff;padding:8px 14px;border-radius:8px;border:none;cursor:pointer"
+              onclick="generateCertificate()">Generate Certificate</button>
+
+      <button id="downloadBtn" title="Download generated certificate as PNG">Download PNG</button>
+    </div>
+
+    <canvas id="certCanvas" width="1200" height="800" style="display:none;margin-top:15px;border:1px solid #ddd;border-radius:6px"></canvas>
+
+    <br><br>
+    <button onclick="closeCertModal()">Close</button>
   </div>
 </div>
 
 <script>
-/* ========== SIDEBAR TOGGLE ========== */
-function toggleMenu(){
-  const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
-}
+function toggleMenu(){ document.getElementById("sidebar").classList.toggle("active"); }
 
-/* ========== ANSWER KEY ========== */
+/* correctAnswers (as you wanted for Customer Analytics) */
 const correctAnswers = {
   q1:"T",q2:"T",q3:"T",q4:"T",q5:"F",
   q6:"b",q7:"b",q8:"a",q9:"b",q10:"b",
@@ -211,103 +248,160 @@ const correctAnswers = {
   q26:"a",q27:"b",q28:"a",q29:"b",q30:"a"
 };
 
-/* ========== CHECK ANSWERS ========== */
-function checkAnswers(){
+let quizPercent = 0;
+
+function checkAnswers() {
   const total = 30;
-  const form = document.getElementById("quizForm");
+  const form = document.getElementById('quizForm');
+  let answered = 0, score = 0;
 
-  let answered=0, score=0;
-
-  for(let i=1;i<=total;i++){
+  for (let i = 1; i <= total; i++) {
     const ans = form.querySelector(`input[name="q${i}"]:checked`);
-    if(ans){
-      answered++;
-      if(ans.value===correctAnswers[`q${i}`]) score++;
-    }
+    if (ans) { answered++; if (ans.value === correctAnswers[`q${i}`]) score++; }
   }
 
-  if(answered<total){
-    document.getElementById("warningModal").style.display="flex";
-    return;
-  }
+  if (answered < total) { document.getElementById('warningModal').style.display = 'flex'; return; }
 
-  const percent = Math.round((score/total)*100);
+  quizPercent = Math.round((score / total) * 100);
+  document.getElementById('scoreText').innerHTML = `Score: <b>${score}</b> / ${total}`;
+  document.getElementById('percentText').textContent = `Percentage: ${quizPercent}%`;
 
-  document.getElementById("scoreText").innerHTML = 
-    `You scored <b>${score}</b> out of <b>${total}</b>`;
-  document.getElementById("percentText").textContent = `Percentage: ${percent}%`;
-
-  if(percent >= 80){
-    document.getElementById("certArea").style.display="block";
-  } else {
-    document.getElementById("certArea").style.display="none";
-  }
-
-  document.getElementById("scoreModal").style.display="flex";
+  document.getElementById('certBtn').style.display = quizPercent >= 80 ? "inline-block" : "none";
+  document.getElementById('scoreModal').style.display = 'flex';
 }
 
-function closeModal(){
-  document.getElementById("scoreModal").style.display="none";
-  document.getElementById("quizForm").reset();
-}
-function closeWarning(){
-  document.getElementById("warningModal").style.display="none";
-}
-
-/* ========== CERTIFICATE GENERATOR ========== */
+function closeModal(){ document.getElementById('scoreModal').style.display='none'; document.getElementById('quizForm').reset(); }
+function closeWarning(){ document.getElementById('warningModal').style.display='none'; }
 function openCertificate(){
+  document.getElementById("certificateModal").style.display = "flex";
+  document.getElementById('downloadBtn').style.display = 'none';
+  document.getElementById('certCanvas').style.display = 'none';
+}
+function closeCertModal(){ document.getElementById("certificateModal").style.display = "none"; }
+
+/* ---------- Certificate drawing helpers (same improved design) ---------- */
+const certCanvas = document.getElementById('certCanvas');
+const certCtx = certCanvas.getContext('2d');
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+
+function drawBase(ctx, canvas) {
+  const W = canvas.width, H = canvas.height;
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0, '#ffffff'); g.addColorStop(0.7, '#f6f7f9'); g.addColorStop(1, '#eef2f6');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+  ctx.save();
+  ctx.lineWidth = Math.max(4, W * 0.006);
+  const goldGrad = ctx.createLinearGradient(0,0,W,0);
+  goldGrad.addColorStop(0, '#b68b2b'); goldGrad.addColorStop(0.5, '#f7d76b'); goldGrad.addColorStop(1, '#b68b2b');
+  ctx.strokeStyle = goldGrad; roundRect(ctx, W*0.02, H*0.02, W*0.96, H*0.94, 12); ctx.stroke(); ctx.restore();
+}
+
+function drawRibbonWave(ctx, canvas) {
+  const W = canvas.width, H = canvas.height;
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(W*0.03, H*0.72);
+  ctx.bezierCurveTo(W*0.25, H*0.80, W*0.5, H*0.64, W*0.97, H*0.80);
+  ctx.lineTo(W*0.97, H*0.98); ctx.lineTo(W*0.03, H*0.98); ctx.closePath();
+  ctx.fillStyle = '#0f3866'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(W*0.03, H*0.70);
+  ctx.bezierCurveTo(W*0.25, H*0.78, W*0.5, H*0.62, W*0.97, H*0.78);
+  ctx.lineTo(W*0.97, H*0.72); ctx.bezierCurveTo(W*0.5, H*0.58, W*0.25, H*0.70, W*0.03, H*0.66);
+  ctx.closePath();
+  const gg = ctx.createLinearGradient(0,H*0.66,0,H*0.82);
+  gg.addColorStop(0,'#f7d76b'); gg.addColorStop(0.5,'#d6b25a'); gg.addColorStop(1,'#b68b2b');
+  ctx.fillStyle = gg; ctx.fill(); ctx.restore();
+}
+
+function drawHeaderText(ctx, canvas) {
+  const W = canvas.width, H = canvas.height;
+  ctx.save(); ctx.textAlign = 'center';
+  const grad = ctx.createLinearGradient(W/2 - 300,0, W/2 + 300,0);
+  grad.addColorStop(0, '#b68b2b'); grad.addColorStop(0.5, '#f7d76b'); grad.addColorStop(1, '#b68b2b');
+  ctx.fillStyle = grad; ctx.font = `bold ${Math.round(canvas.height*0.08)}px Poppins`;
+  ctx.fillText('CERTIFICATE', W/2, H*0.18);
+  ctx.fillStyle = '#0b1d3a'; ctx.font = `700 ${Math.round(canvas.height*0.035)}px Poppins`;
+  ctx.fillText('OF ACHIEVEMENT', W/2, H*0.24);
+  ctx.fillStyle = '#444'; ctx.font = `${Math.round(canvas.height*0.02)}px Poppins`;
+  ctx.fillText('This certificate is proudly awarded to', W/2, H*0.285);
+  ctx.restore();
+}
+
+function drawNameAndText(ctx, canvas, name, subjectTitle){
+  const W = canvas.width, H = canvas.height;
+  ctx.save(); ctx.textAlign = 'center';
+  ctx.fillStyle = '#0b1d3a'; ctx.font = `${Math.round(H*0.07)}px "Great Vibes", serif`;
+  ctx.fillText(name, W/2, H*0.40);
+  ctx.fillStyle = '#666'; ctx.font = `${Math.round(H*0.025)}px Poppins`;
+  ctx.fillText('For successfully completing the quiz in:', W/2, H*0.48);
+  ctx.font = `${Math.round(H*0.035)}px Poppins`; ctx.fillStyle = '#0b1d3a';
+  ctx.fillText(subjectTitle, W/2, H*0.525); ctx.restore();
+}
+
+function drawScoreAndDate(ctx, canvas, percent, dateString){
+  const W = canvas.width, H = canvas.height;
+  ctx.save(); ctx.textAlign = 'center';
+  ctx.fillStyle = '#333'; ctx.font = `${Math.round(H*0.03)}px Poppins`;
+  ctx.fillText(`${percent}% Score`, W/2, H*0.62);
+  ctx.font = `${Math.round(H*0.02)}px Poppins`; ctx.fillStyle = '#444';
+  ctx.fillText(`Date Issued: ${dateString}`, W/2, H*0.68); ctx.restore();
+}
+
+async function composeCertificateOnCanvas(canvas, ctx, name, subjectTitle, percent, dateString){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawBase(ctx, canvas); drawRibbonWave(ctx, canvas); drawHeaderText(ctx, canvas);
+  drawNameAndText(ctx, canvas, name, subjectTitle);
+  drawScoreAndDate(ctx, canvas, percent, dateString);
+  ctx.save(); ctx.fillStyle = '#666'; ctx.font = `${Math.round(canvas.height*0.018)}px Poppins`; ctx.textAlign='center';
+  ctx.fillText('Generated by BSOA Learning — Customer Analytics Quiz', canvas.width/2, canvas.height*0.94); ctx.restore();
+}
+
+/* ---------- Main generate + download logic ---------- */
+async function generateCertificate(){
   const name = document.getElementById("studentName").value.trim();
-  if(name===""){
-    alert("Please enter your name first.");
-    return;
-  }
+  if (!name) { alert("Please enter your name first."); return; }
 
-  const canvas = document.getElementById("certCanvas");
-  const ctx = canvas.getContext("2d");
+  const today = new Date();
+  const dateString = today.toLocaleDateString('en-PH', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+  const subjectTitle = "Customer Analytics";
 
-  ctx.fillStyle="#ffffff";
-  ctx.fillRect(0,0,900,650);
+  certCanvas.style.display = "block";
+  await composeCertificateOnCanvas(certCanvas, certCtx, name, subjectTitle, quizPercent, dateString);
 
-  ctx.strokeStyle="#0b1e3f";
-  ctx.lineWidth=10;
-  ctx.strokeRect(20,20,860,610);
-
-  ctx.fillStyle="#0b1e3f";
-  ctx.font="28px Poppins";
-  ctx.textAlign="center";
-  ctx.fillText("Certificate of Completion",450,120);
-
-  ctx.font="20px Poppins";
-  ctx.fillText("This certifies that",450,190);
-
-  ctx.font="34px Poppins";
-  ctx.fillText(name,450,260);
-
-  ctx.font="20px Poppins";
-  ctx.fillText("has successfully completed the",450,330);
-
-  ctx.font="26px Poppins";
-  ctx.fillText("Customer Analytics",450,380);
-
-  const date = new Date().toLocaleDateString();
-  ctx.font="18px Poppins";
-  ctx.fillText("Date Issued: "+date,450,450);
-
-  document.getElementById("downloadBtn").style.display="inline-block";
-  document.getElementById("certificateModal").style.display="flex";
+  // show download btn (handler attached in DOMContentLoaded)
+  document.getElementById('downloadBtn').style.display = 'inline-block';
 }
 
-function closeCert(){
-  document.getElementById("certificateModal").style.display="none";
-}
+/* Attach stable download handler once DOM is ready */
+document.addEventListener('DOMContentLoaded', function(){
+  const dl = document.getElementById('downloadBtn');
+  dl.addEventListener('click', function(){
+    // Ensure canvas has been generated
+    if (certCanvas.style.display === 'none') { alert('Please generate the certificate first.'); return; }
 
-function downloadCertificate(){
-  const canvas = document.getElementById("certCanvas");
-  const link = document.createElement("a");
-  link.download = "Customer_Analytics_Certificate.png";
-  link.href = canvas.toDataURL();
-  link.click();
-}
+    // Filename uses current name field
+    const name = document.getElementById("studentName").value.trim() || 'student';
+    const safeName = name.replace(/\s+/g,'_').replace(/[^\w\-_.]/g, '');
+    const filename = `${safeName}_certificate.png`;
+
+    // Use toBlob for reliable binary download
+    certCanvas.toBlob(function(blob){
+      if (!blob) { alert('Error creating image. Try again.'); return; }
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+    }, 'image/png', 1);
+  });
+});
 </script>
 
 </body>
